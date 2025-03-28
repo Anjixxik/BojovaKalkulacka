@@ -1,14 +1,595 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="style.css">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bojová Kalkulačka</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bojová Kalkulačka</title>
+  <style>
+    body {
+
+      font-family: Arial, sans-serif;
+      background-image: url(./images/background2.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    label {
+      color: rgb(13, 120, 33);
+      font-size: large;
+      font-weight: bold;
+    }
+    .header {
+      background-color: #8b4513;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 24px;
+    }
+    .wave-controls {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .wave-container {
+      display: flex;
+      justify-content: space-around;
+    }
+    .side {
+      width: 30%;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .wave {
+      margin-bottom: 15px;
+    }
+    .wave-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .wave-inputs {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .wave-inputs .units, .wave-inputs .tools {
+      flex: 1;
+      text-align: center;
+    }
+    .wave-inputs .units span, .wave-inputs .tools span {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .wave-inputs .units button, .wave-inputs .tools button {
+      margin: 0 2px;
+    }
+    .attack-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .attack-button:hover {
+      background-color: #45a049;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      padding: 20px;
+      z-index: 1000;
+    }
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .popup-header button {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .popup-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    .popup-footer button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .popup-footer .save-button {
+      background-color: #4caf50;
+      color: white;
+    }
+    .popup-footer .close-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .popup-section {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+    .popup-section h4 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      color: #333;
+    }
+    .slot-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .slot {
+      width: 60px;
+      height: 60px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #eaeaea;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .slider {
+      flex: 1;
+    }
+    .slider-value {
+      width: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+    }
+    .popup-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .popup-toggle button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #ddd;
+    }
+    .popup-toggle button.active {
+      background-color: #4caf50;
+      color: white;
+    }
+    .popup-section {
+      display: none;
+    }
+    .popup-section.active {
+      display: block;
+    }
+    .popup-content input[type="number"] {
+      width: 60px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
-    <button onclick="document.location='./index.html'">Home</button>
-    <button onclick="document.location='./kodex.html'">Kodex</button>
-    <button onclick="document.location='./kalkulacka.html'">Kalkulačka</button>
+  <button onclick="document.location='./index.html'">Home</button>
+  <button onclick="document.location='./kodex.html'">Kodex</button>
+  <button onclick="document.location='./kalkulacka.html'">Kalkulačka</button>
+  <div class="header">Attack</div>
+
+  <div class="wave-controls">
+    <label for="wave-count">Select Number of Waves:</label>
+    <select id="wave-count">
+      <option value="4" selected>4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+      <option value="19">19</option>
+      <option value="20">20</option>
+    </select>
+  </div>
+
+  <div class="wave-container">
+    <div class="side" id="left-flank">
+      <h3>Left Flank</h3>
+      <!-- Waves will be dynamically added here -->
+    </div>
+    <div class="side" id="front">
+      <h3>Front</h3>
+      <!-- Waves will be dynamically added here -->
+    </div>
+    <div class="side" id="right-flank">
+      <h3>Right Flank</h3>
+      <!-- Waves will be dynamically added here -->
+    </div>
+  </div>
+
+  <button class="attack-button">Show Result</button>
+
+  <div class="popup-overlay" id="popup-overlay"></div>
+  <div class="popup" id="popup">
+    <div class="popup-header">
+      <span>Popup Interface</span>
+      <button id="popup-close">✖</button>
+    </div>
+    <div class="popup-content">
+      <div class="popup-toggle">
+        <button id="toggle-melee" class="active">Melee Soldiers</button>
+        <button id="toggle-ranged">Ranged Soldiers</button>
+      </div>
+      <div id="melee-section" class="popup-section active">
+        <h4>Melee Soldiers</h4>
+        <div class="slot-container">
+          <div class="slot">Empty</div>
+          <div class="slot">Empty</div>
+        </div>
+        <div class="slider-container">
+          <input type="range" class="slider" min="0" max="444" value="0" id="melee-slider">
+          <input type="number" min="0" max="444" value="0" id="melee-input">
+        </div>
+      </div>
+      <div id="ranged-section" class="popup-section">
+        <h4>Ranged Soldiers</h4>
+        <div class="slot-container">
+          <div class="slot">Empty</div>
+          <div class="slot">Empty</div>
+        </div>
+        <div class="slider-container">
+          <input type="range" class="slider" min="0" max="444" value="0" id="ranged-slider">
+          <input type="number" min="0" max="444" value="0" id="ranged-input">
+        </div>
+      </div>
+    </div> 
+    <div class="popup-footer">
+      <button class="close-button" id="popup-close-footer">✖</button>
+      <button class="save-button" id="popup-save">✔</button>
+    </div>
+  </div>
+
+  <div class="popup" id="flank-popup">
+    <div class="popup-header">
+      <span>Flank Configuration</span>
+      <button id="flank-popup-close">✖</button>
+    </div>
+    <div class="popup-content">
+      <h4>Flank Soldiers</h4>
+      <div class="slider-container">
+        <input type="range" class="slider" min="0" max="200" value="0" id="flank-slider">
+        <input type="number" min="0" max="200" value="0" id="flank-input">
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="close-button" id="flank-popup-close-footer">✖</button>
+      <button class="save-button" id="flank-popup-save">✔</button>
+    </div>
+  </div>
+
+  <div class="popup" id="tools-popup">
+    <div class="popup-header">
+      <span>Tools Configuration</span>
+      <button id="tools-popup-close">✖</button>
+    </div>
+    <div class="popup-content">
+      <h4>Tools</h4>
+      <div class="slot-container">
+        <div class="slot">Empty</div>
+        <div class="slot">Empty</div>
+        <div class="slot">Empty</div>
+      </div>
+      <div class="slider-container">
+        <input type="range" class="slider" min="0" max="50" value="0" id="tools-slider">
+        <input type="number" min="0" max="50" value="0" id="tools-input">
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="close-button" id="tools-popup-close-footer">✖</button>
+      <button class="save-button" id="tools-popup-save">✔</button>
+    </div>
+  </div>
+
+  <script>
+    const waveCountSelect = document.getElementById('wave-count');
+    const leftFlank = document.getElementById('left-flank');
+    const front = document.getElementById('front');
+    const rightFlank = document.getElementById('right-flank');
+    function createWaveHTML(waveNumber, isFront = false) {
+      const unitLimit = isFront ? 444 : 200;
+      const toolLimit = 50;
+      return `
+        <div class="wave" data-wave="${waveNumber}">
+          <div class="wave-title">Wave ${waveNumber}</div>
+          <div class="wave-inputs">
+            <div class="units">
+              <span>Units 0 / ${unitLimit}</span>
+              <button class="plus-button" data-wave="${waveNumber}" data-type="units">+</button>
+            </div>
+            <div class="tools">
+              <span>Tools 0 / ${toolLimit}</span>
+              <button class="plus-button" data-wave="${waveNumber}" data-type="tools">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    function updateWaves() {
+      const waveCount = parseInt(waveCountSelect.value, 10);
+      leftFlank.innerHTML = '<h3>Left Flank</h3>';
+      front.innerHTML = '<h3>Front</h3>';
+      rightFlank.innerHTML = '<h3>Right Flank</h3>';
+
+      for (let i = 1; i <= waveCount; i++) {
+        leftFlank.innerHTML += createWaveHTML(i);
+        front.innerHTML += createWaveHTML(i, true);
+        rightFlank.innerHTML += createWaveHTML(i);
+      }
+    }
+    waveCountSelect.addEventListener('change', updateWaves);
+    updateWaves();
+
+    function setupPopup() {
+      const unitsPopup = document.getElementById('popup'); // Units pop-up
+      const toolsPopup = document.getElementById('tools-popup'); // Tools pop-up
+      const overlay = document.getElementById('popup-overlay');
+      const meleeSlider = document.getElementById('melee-slider');
+      const meleeInput = document.getElementById('melee-input');
+      const rangedSlider = document.getElementById('ranged-slider');
+      const rangedInput = document.getElementById('ranged-input');
+      const toolsSlider = document.getElementById('tools-slider');
+      const toolsInput = document.getElementById('tools-input');
+      const toolsContent = document.querySelector('#tools-popup .popup-content');
+      let currentTarget = null; // The span element tied to the clicked button
+      let currentLimit = 444; // Default limit for the front section
+      let currentMeleeValue = 0; // Track the current melee value
+      let currentRangedValue = 0; // Track the current ranged value
+
+      function addEmptyBoxesToToolsPopup(isFlank) {
+        toolsContent.innerHTML = `
+          <h4>Tools</h4>
+          <div class="slot-container" style="justify-content: center;">
+            <div class="slot">Empty</div>
+            <div class="slot">Empty</div>
+            ${!isFlank ? '<div class="slot">Empty</div>' : ''}
+          </div>
+          <div class="slider-container">
+            <input type="range" class="slider" min="0" max="50" value="0" id="tools-slider">
+            <input type="number" min="0" max="50" value="0" id="tools-input">
+          </div>
+        `;
+      }
+
+      function openUnitsPopup(targetSpan, isFlank) {
+        currentTarget = targetSpan;
+        currentLimit = isFlank ? 200 : 444; // Set limit based on flank or front
+        meleeSlider.max = currentLimit - currentRangedValue; // Adjust melee max limit
+        meleeInput.max = meleeSlider.max; // Adjust melee input max limit
+        rangedSlider.max = currentLimit - currentMeleeValue; // Adjust ranged max limit
+        rangedInput.max = rangedSlider.max; // Adjust ranged input max limit
+        const currentValue = parseInt(currentTarget.textContent.split(' ')[1]) || 0;
+        meleeSlider.value = currentValue; // Set slider to current value
+        meleeInput.value = currentValue; // Set input to current value
+        unitsPopup.style.display = 'block';
+        overlay.style.display = 'block';
+      }
+
+      function closeUnitsPopup(reset = false) {
+        if (reset) {
+          meleeSlider.value = 0; // Reset melee slider
+          meleeInput.value = 0; // Reset melee input
+          rangedSlider.value = 0; // Reset ranged slider
+          rangedInput.value = 0; // Reset ranged input
+        }
+        unitsPopup.style.display = 'none';
+        overlay.style.display = 'none';
+      }
+
+      function saveUnitsValue() {
+        const meleeValue = parseInt(meleeInput.value) || 0;
+        const rangedValue = parseInt(rangedInput.value) || 0;
+        const totalValue = meleeValue + rangedValue;
+        currentTarget.textContent = `Units ${Math.min(totalValue, currentLimit)} / ${currentLimit}`;
+        currentMeleeValue = meleeValue; // Update current melee value
+        currentRangedValue = rangedValue; // Update current ranged value
+        closeUnitsPopup();
+      }
+
+      function openToolsPopup(isFlank) {
+        addEmptyBoxesToToolsPopup(isFlank); // Add empty boxes dynamically
+        toolsPopup.style.display = 'block';
+        overlay.style.display = 'block';
+      }
+
+      document.body.addEventListener('click', (event) => {
+        if (event.target.classList.contains('plus-button')) {
+          const targetSpan = event.target.previousElementSibling; // The span above the button
+          const isFlank = event.target.closest('.side').id !== 'front'; // Check if it's a flank
+          if (event.target.dataset.type === 'units') {
+            openUnitsPopup(targetSpan, isFlank);
+          } else if (event.target.dataset.type === 'tools') {
+            openToolsPopup(isFlank);
+          }
+        }
+      });
+
+      document.getElementById('popup-close').addEventListener('click', () => closeUnitsPopup(true));
+      document.getElementById('popup-close-footer').addEventListener('click', () => closeUnitsPopup(true));
+      document.getElementById('popup-save').addEventListener('click', saveUnitsValue);
+
+      meleeSlider.addEventListener('input', () => {
+        meleeInput.value = meleeSlider.value;
+        rangedSlider.max = currentLimit - meleeSlider.value; // Adjust ranged max limit dynamically
+        rangedInput.max = rangedSlider.max; // Adjust ranged input max limit dynamically
+      });
+
+      meleeInput.addEventListener('input', () => {
+        if (meleeInput.value < meleeSlider.min) meleeInput.value = meleeSlider.min;
+        if (meleeInput.value > meleeSlider.max) meleeInput.value = meleeSlider.max;
+        meleeSlider.value = meleeInput.value;
+        rangedSlider.max = currentLimit - meleeInput.value; // Adjust ranged max limit dynamically
+        rangedInput.max = rangedSlider.max; // Adjust ranged input max limit dynamically
+      });
+
+      rangedSlider.addEventListener('input', () => {
+        rangedInput.value = rangedSlider.value;
+        meleeSlider.max = currentLimit - rangedSlider.value; // Adjust melee max limit dynamically
+        meleeInput.max = meleeSlider.max; // Adjust melee input max limit dynamically
+      });
+
+      rangedInput.addEventListener('input', () => {
+        if (rangedInput.value < rangedSlider.min) rangedInput.value = rangedSlider.min;
+        if (rangedInput.value > rangedSlider.max) rangedInput.value = rangedSlider.max;
+        rangedSlider.value = rangedInput.value;
+        meleeSlider.max = currentLimit - rangedInput.value; // Adjust melee max limit dynamically
+        meleeInput.max = meleeSlider.max; // Adjust melee input max limit dynamically
+      });
+    }
+
+    setupPopup();
+
+    function setupSliders() {
+      const meleeSlider = document.getElementById('melee-slider');
+      const meleeValue = document.getElementById('melee-value');
+      const rangedSlider = document.getElementById('ranged-slider');
+      const rangedValue = document.getElementById('ranged-value');
+
+      meleeSlider.addEventListener('input', () => {
+        meleeValue.textContent = meleeSlider.value;
+      });
+
+      rangedSlider.addEventListener('input', () => {
+        rangedValue.textContent = rangedSlider.value;
+      });
+    }
+
+    setupSliders();
+
+    function setupPopupToggle() {
+      const toggleMelee = document.getElementById('toggle-melee');
+      const toggleRanged = document.getElementById('toggle-ranged');
+      const meleeSection = document.getElementById('melee-section');
+      const rangedSection = document.getElementById('ranged-section');
+
+      toggleMelee.addEventListener('click', () => {
+        toggleMelee.classList.add('active');
+        toggleRanged.classList.remove('active');
+        meleeSection.classList.add('active');
+        rangedSection.classList.remove('active');
+      });
+
+      toggleRanged.addEventListener('click', () => {
+        toggleRanged.classList.add('active');
+        toggleMelee.classList.remove('active');
+        rangedSection.classList.add('active');
+        meleeSection.classList.remove('active');
+      });
+    }
+
+    function setupInputSync(sliderId, inputId) {
+      const slider = document.getElementById(sliderId);
+      const input = document.getElementById(inputId);
+
+      slider.addEventListener('input', () => {
+        input.value = slider.value;
+      });
+
+      input.addEventListener('input', () => {
+        if (input.value < slider.min) input.value = slider.min;
+        if (input.value > slider.max) input.value = slider.max;
+        slider.value = input.value;
+      });
+    }
+
+    function setupSeparatePopups() {
+      const flankPopup = document.getElementById('flank-popup');
+      const toolsPopup = document.getElementById('tools-popup');
+      const flankOverlay = document.getElementById('popup-overlay');
+      const toolsOverlay = document.getElementById('popup-overlay');
+
+      function openPopup(popup) {
+        popup.style.display = 'block';
+        flankOverlay.style.display = 'block';
+      }
+
+      function closePopup(popup) {
+        popup.style.display = 'none';
+        flankOverlay.style.display = 'none';
+      }
+
+      document.body.addEventListener('click', (event) => {
+        if (event.target.classList.contains('plus-button')) {
+          const wave = event.target.closest('.wave');
+          if (wave.querySelector('.tools')) {
+            openPopup(toolsPopup);
+          } else {
+            openPopup(flankPopup);
+          }
+        }
+      });
+
+      document.getElementById('flank-popup-close').addEventListener('click', () => closePopup(flankPopup));
+      document.getElementById('tools-popup-close').addEventListener('click', () => closePopup(toolsPopup));
+    }
+
+    setupPopupToggle();
+    setupInputSync('melee-slider', 'melee-input');
+    setupInputSync('ranged-slider', 'ranged-input');
+    setupInputSync('flank-slider', 'flank-input');
+    setupInputSync('tools-slider', 'tools-input');
+    setupSeparatePopups();
+  </script>
 </body>
 </html>
