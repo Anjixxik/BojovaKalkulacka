@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Defense Calculator - GGE (Modernized)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+   <style>
+      html, body {
+         background-color: black;
+      }
+   </style>
+   <button onclick="document.location='./index.html'">Home</button>
+   <button onclick="document.location='./kodex.html'">Kodex</button>
+   <button onclick="document.location='./kalkulacka.html'">Kalkulačka</button>
+   <button onclick="document.location='./defense_calculator_modernized.html'">Kalkulačka2</button>
+  <h1>Goodgame Empire – Defense Calculator</h1>
+  <!-- Modernized standalone version, grouped and formatted -->
+  <!-- === BEGIN ORIGINAL CONTENT (FORM + SCRIPT) === -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="html-block-html" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-type" content="text/html; charset=utf-8"/><link rel="stylesheet" href="http://ggempire.wdfiles.com/common--theme/base/css/html-block.css"/></head><body>
+
+<SCRIPT TYPE="text/javascript">
+<!--
+
+function Combat_calc(Form) {
+debug = false;
+m0=0; m1=0; m2=0;
+r0=0; r1=0; r2=0;
+answer = "working...<BR>";
+ok = false;
+for (i=0; i<5; i++) {
+   if (Form.Wall[i].checked) {
+      t = Number(Form.Wall[i].value);
+      ok = true
+      }
+   }
+if (ok) { t = t * 20; m0+=t; m1+=t; m2+=t; r0+=t; r1+=t; r2+=t }
+else { answer = answer + "Problem with castle wall<BR>" }
+
+t = Number(Form.Gate.value);
+if (t>0 && t<5) { t = (t * 20) + 10; m1 += t; r1 += t }
+else if (t>4 && t<8) { t = (t * 20) + 20; m1 += t; r1 += t }
+else if (t==8) { t = 200; m1 += t; r1 += t }
+else if (t==9) { t = 215; m1 += t; r1 += t }
+else { answer = answer + "Problem with castle gate<BR>" }
+
+ok = false;
+for (i=0; i<3; i++) {
+   if (Form.Moat[i].checked) {
+      t = Number(Form.Moat[i].value);
+      ok = true
+      }
+   }
+if (ok) { t = t * 10; m0+=t; m1+=t; m2+=t; r0+=t; r1+=t; r2+=t }
+else { answer = answer + "Problem with castle moat<BR>" }
+
+troops = Number(Form.Troops.value);
+if (troops < 4 || troops > 320) { answer = answer + "Problem with troop count<BR>" }
+
+if (Form.TroopType[0].checked) {
+   mdefval = 135; mdefname = "Halberdiers";
+   rdefval = 125; rdefname = "Longbowmen" }
+if (Form.TroopType[1].checked) {
+   mdefval = 142; mdefname = "Veteran Spearmen";
+   rdefval = 132; rdefname = "Veteran Bowmen" }
+if (Form.TroopType[2].checked) {
+   mdefval = 150; mdefname = "Sentinels of Kingsguard";
+   rdefval = 139; rdefname = "Scouts of Kingsguard" }
+if (debug) { answer = answer + "MDEFVAL: " + mdefval + " " + mdefname + " RDEFVAL: " + rdefval + " " + rdefname + "<BR>" }
+
+ll = Number(Form.LL.value); lc = Number(Form.LC.value); lr = Number(Form.LR.value);
+stl = Number(Form.STL.value); stc = Number(Form.STC.value);  str = Number(Form.STR.value);
+el = Number(Form.EL.value);  ec = Number(Form.EC.value); er = Number(Form.ER.value);
+brc = Number(Form.FBRC.value); irc = Number(Form.IRC.value); hrc = Number(Form.HRC.value);
+nl = Number(Form.NL.value); nc = Number(Form.NC.value); nr = Number(Form.NR.value);
+cml = Number(Form.CML.value); cmc = Number(Form.CMC.value); cmr = Number(Form.CMR.value);
+swl = Number(Form.FSWL.value); swc = Number(Form.FSWC.value); swr = Number(Form.FSWR.value);
+wbl = Number(Form.WBL.value); wbc = Number(Form.WBC.value); wbr = Number(Form.WBR.value);
+abl = Number(Form.ABL.value); abc = Number(Form.ABC.value); abr = Number(Form.ABR.value);
+bll = Number(Form.BLL.value); blc= Number(Form.BLC.value); blr = Number(Form.BLR.value);
+rl = Number(Form.RL.value); rc = Number(Form.RC.value); rr = Number(Form.RR.value);
+tl = Number(Form.TL.value); tc = Number(Form.TC.value); tr = Number(Form.TR.value);
+mal = Number(Form.FMAL.value); mac = Number(Form.FMAC.value); mar = Number(Form.FMAR.value);
+grc = Number(Form.GRC.value); imc = Number(Form.IMC.value); pc = Number(Form.PC.value);
+fal = Number(Form.FAL.value); fac= Number(Form.FAC.value); far= Number(Form.FAR.value);
+wl = Number(Form.WL.value); wc = Number(Form.WC.value); wr= Number(Form.WR.value);
+asl = Number(Form.ASL.value); asc = Number(Form.ASC.value); asr = Number(Form.ASR.value);
+ssl = Number(Form.SSL.value); ssc = Number(Form.SSC.value); ssr = Number(Form.SSR.value);
+gsl = Number(Form.GSL.value); gsc = Number(Form.GSC.value); gsr = Number(Form.GSR.value);
+fml = Number(Form.FML.value); fmc = Number(Form.FMC.value); fmr = Number(Form.FMR.value);
+
+if (rl<0 || rc<0 || rr<0 || tl<0 || tc<0 || tr<0 || mal<0 || mac<0 || mar<0)
+   { answer = answer + "Problem with defensive wall tool numbers<BR>" }
+if (rl+rc+rr+tl+tc+tr+mal+mac+mar > 36)
+   { answer = answer + "Problem with defensive wall tool numbers<BR>" }
+if (grc<0 || imc<0 || pc<0)
+   { answer = answer + "Problem with defensive gate tool numbers<BR>" }
+if (grc+imc+pc > 8)
+   { answer = answer + "Problem with defensive gate tool numbers<BR>" }
+if (fal<0 || fac<0 || far<0 || wl<0 || wc<0 || wr<0 || asl<0 || asc<0 || asr<0)
+   { answer = answer + "Problem with defensive range tool numbers<BR>" }
+if (fal+fac+far+wl+wc+wr+asl+asc+asr > 12)
+   { answer = answer + "Problem with defensive range tool numbers<BR>" }
+if (ssl<0 || ssc<0 || ssr<0 || gsl<0 || gsc<0 || gsr<0 || fml<0 || fmc<0 || fmr<0)
+   { answer = answer + "Problem with defensive moat tool numbers<BR>" }
+if (ssl+ssc+ssr+gsl+gsc+gsr+fml+fmc+fmr > 12)
+   { answer = answer + "Problem with defensive moat tool numbers<BR>" }
+
+if (debug) { s = "&nbsp;";
+answer = answer + "Raw tool data:<BR>";
+answer = answer + ll + s + lc + s + lr + s + s + rl + s + rc + s + rr + "<BR>";
+answer = answer + stl + s + stc + s + str + s + s + tl + s + tc + s + tr + "<BR>";
+answer = answer + el + s + ec + s + er + s + s + mal + s + mac + s + mar + "<BR>";
+answer = answer + brc + s + grc + "<BR>";
+answer = answer + irc + s + imc + "<BR>";
+answer = answer + hrc + s + pc + "<BR>";
+answer = answer + nl + s + nc + s + nr +s + s + fal + s + fac + s + far + "<BR>";
+answer = answer + cml + s + cmc +s + cmr + s + s + wl + s + wc + s + wr + "<BR>";
+answer = answer + swl + s + swc + s + swr + s + s + asl + s + asc + s + asr + "<BR>";
+answer = answer + wbl + s + wbc + s + wbr + s + s + ssl + s + ssc + s + ssr + "<BR>";
+answer = answer + abl + s + abc + s + abr + s + s + gsl + s + gsc + s + gsr + "<BR>";
+answer = answer + bll + s + blc + s + blr + s + s + fml + s + fmc + s + fmr + "<BR>" }
+
+attwl = 10*ll + 15*stl + 20*el;  attwc = 10*lc + 15*stc + 20*ec;   attwr = 10*lr + 15*str + 20*er;
+attgc = 10*brc + 15*irc + 20*hrc;
+attrl = 5*nl + 10*cml + 15*swl;  attrc = 5*nc + 10*cmc + 15*swc;  attrr = 5*nr + 10*cmr + 15*swr;
+attml = 5*wbl + 10*abl + 15*bll;  attmc = 5*wbc + 10*abc + 15*blc; attmr = 5*wbr + 10*abr + 15*blr;
+
+defwl = 25*rl + 40*tl + 50*mal;  defwc = 25*rc + 40*tc + 50*mac;  defwr = 25*rr + 40*tr + 50*mar;
+defgc = 35*grc + 60*imc + 75*pc;
+defrl = 25*fal + 50*wl + 70*asl;  defrc = 25*fac + 50*wc + 70*asc;  defrr = 25*far + 50*wr + 70*asr;
+defml = 35*ssl + 80*gsl + 110*fml;  defmc = 35*ssc + 80*gsc + 110*fmc;  defmr = 35*ssr + 80*gsr + 110*fmr;
+
+if (debug) { s = "&nbsp;";
+answer = answer + "Tool calculations:<BR>";
+answer = answer + attwl + s + attwc + s + attwr + s + s + defwl + s + defwc + s + defwr + "<BR>";
+answer = answer + attgc + s + defgc + "<BR>";
+answer = answer + attrl + s + attrc + s + attrr + s + s + defrl + s + defrc + s + defrr + "<BR>";
+answer = answer + attml + s + attmc + s + attmr + s + s + defml + s + defmc + s + defmr + "<BR>" }
+
+casw = Number(Form.CasWall.value);
+if (casw < 0 || casw > 100) { answer = answer + "Problem with Castellan wall value<BR>" }
+casg = Number(Form.CasGate.value);
+if (casg < 0 || casg > 100) { answer = answer + "Problem with Castellan gate value<BR>" }
+casd = Number(Form.CasMoat.value);
+if (casd < 0 || casd > 100) { answer = answer + "Problem with Castellan moat value<BR>" }
+casm = Number(Form.CasMelee.value);
+if (casm < 0 || casm > 100) { answer = answer + "Problem with Castellan melee value<BR>" }
+casr = Number(Form.CasRange.value);
+if (casr < 0 || casr > 100) { answer = answer + "Problem with Castellan range value<BR>" }
+comw = Number(Form.ComWall.value);
+if (comw < 0 || comw > 100) { answer = answer + "Problem with Commander wall value<BR>" }
+comg = Number(Form.ComGate.value);
+if (comg < 0 || comg > 100) { answer = answer + "Problem with Commander gate value<BR>" }
+comd = Number(Form.ComMoat.value);
+if (comd < 0 || comd > 100) { answer = answer + "Problem with Commander moat value<BR>" }
+comm = Number(Form.ComMelee.value);
+if (comm < 0 || comm > 100) { answer = answer + "Problem with Commander melee value<BR>" }
+comr = Number(Form.ComRange.value);
+if (comr < 0 || comr > 100) { answer = answer + "Problem with Commander range value<BR>" }
+
+m0 = m0 + defwl + defml - attwl - attml + casw + casd - comw - comd; if (m0<0) {m0=0} 
+m1 = m1+defwc+defgc+defmc+casw+casg+casd-attwc-attgc-attmc-comw-comg-comd; if (m1<0) {m1=0}
+m2 = m2 + defwr + defmr + casw + casd - attwr - attmr - comw - comd; if (m2<0) {m2=0}
+r0 = r0 + defwl + defrl + defml + casw + casd - attwl - attrl - attml - comw - comd; if (r0<-attrl) {r0=-attrl}
+r1 = r1+defwc+defgc+defrc+defmc+casw+casg+casd-attwc-attgc-attrc-attmc-comw-comg-comd; if (r1<-attrc) {r1=-attrc}
+r2 = r2 + defwr + defrr + defmr + casw + casd - attwr - attrr - attmr - comw - comd; if (r2<-attrr) {r2=-attrr}
+m0 = m0 + casm - comm; m1 = m1 + casm - comm; m2 = m2 + casm - comm;
+r0 = r0 + casr - comr; r1 = r1 + casr - comr; r2 = r2 + casr - comr;
+
+if (debug) { s = "&nbsp;";
+answer = answer + "Melee and range values:<BR>";
+answer = answer + m0 + s + m1 + s + m2 + "<BR>";
+answer = answer + r0 + s + r1 + s + r2 + "<BR>" }
+
+lm = 0; cm = 0; rm = 0;
+lr = 0; cr = 0; rr = 0;
+lm = lm + 25 * Number(Form.SL.value);
+cm = cm + 25 * Number(Form.SC.value);
+rm = rm + 25 * Number(Form.SR.value);
+lr = lr + 23 * Number(Form.BL.value);
+cr = cr + 23 * Number(Form.BC.value);
+rr = rr + 23 * Number(Form.BR.value);
+lm = lm + 38 * Number(Form.ML.value);
+cm = cm + 38 * Number(Form.MC.value);
+rm = rm + 38 * Number(Form.MR.value);
+lr = lr + 39 * Number(Form.CL.value);
+cr = cr + 39 * Number(Form.CC.value);
+rr = rr + 39 * Number(Form.CR.value);
+lm = lm + 31 * Number(Form.GL.value);
+cm = cm + 31 * Number(Form.GC.value);
+rm = rm + 31 * Number(Form.GR.value);
+lr = lr + 10 * Number(Form.AL.value);
+cr = cr + 10 * Number(Form.AC.value);
+rr = rr + 10 * Number(Form.AR.value);
+lm = lm + 17 * Number(Form.HL.value);
+cm = cm + 17 * Number(Form.HC.value);
+rm = rm + 17 * Number(Form.HR.value);
+lr = lr + 20 * Number(Form.OL.value);
+cr = cr + 20 * Number(Form.OC.value);
+rr = rr + 20 * Number(Form.OR.value);
+lm = lm + 109 * Number(Form.ZL.value);
+cm = cm + 109 * Number(Form.ZC.value);
+rm = rm + 109 * Number(Form.ZR.value);
+lr = lr + 92 * Number(Form.XL.value);
+cr = cr + 92 * Number(Form.XC.value);
+rr = rr + 92 * Number(Form.XR.value);
+if (debug) {
+   answer = answer + "Z: " + Number(Form.ZL.value) + s + Number(Form.ZC.value) + s + Number(Form.ZR.value) + "<BR>";
+   answer = answer + "R: " + Number(Form.XL.value) + s + Number(Form.XC.value) + s + Number(Form.XR.value) + "<BR>" }
+lm = lm + 15 * Number(Form.VSL.value);
+cm = cm + 15 * Number(Form.VSC.value);
+rm = rm + 15 * Number(Form.VSR.value);
+lr = lr + 18 * Number(Form.VBL.value);
+cr = cr + 18 * Number(Form.VBC.value);
+rr = rr + 18 * Number(Form.VBR.value);
+lm = lm + 118 * Number(Form.VML.value);
+cm = cm + 118 * Number(Form.VMC.value);
+rm = rm + 118 * Number(Form.VMR.value);
+lr = lr + 98 * Number(Form.VCL.value);
+cr = cr + 98 * Number(Form.VCC.value);
+rr = rr + 98 * Number(Form.VCR.value);
+lm = lm + 111 * Number(Form.VGL.value);
+cm = cm + 111 * Number(Form.VGC.value);
+rm = rm + 111 * Number(Form.VGR.value);
+lm = lm + 38 * Number(Form.SML.value);
+cm = cm + 38 * Number(Form.SMC.value);
+rm = rm + 38 * Number(Form.SMR.value);
+lr = lr + 39 * Number(Form.SCL.value);
+cr = cr + 39 * Number(Form.SCC.value);
+rr = rr + 39 * Number(Form.SCR.value);
+lm = lm + 109 * Number(Form.SRL.value);
+cm = cm + 109 * Number(Form.SRC.value);
+rm = rm + 109 * Number(Form.SRR.value);
+lr = lr + 92 * Number(Form.SFL.value);
+cr = cr + 92 * Number(Form.SFC.value);
+rr = rr + 92 * Number(Form.SFR.value);
+lm = lm + 113 * Number(Form.MAL.value);
+cm = cm + 113 * Number(Form.MAC.value);
+rm = rm + 113 * Number(Form.MAR.value);
+lm = lm + 111 * Number(Form.PYL.value);
+cm = cm + 111 * Number(Form.PYC.value);
+rm = rm + 111 * Number(Form.PYR.value);
+lm = lm + 132 * Number(Form.TZL.value);
+cm = cm + 132 * Number(Form.TZC.value);
+rm = rm + 132 * Number(Form.TZR.value);
+lr = lr + 121 * Number(Form.TXL.value);
+cr = cr + 121 * Number(Form.TXC.value);
+rr = rr + 121 * Number(Form.TXR.value);
+lm = lm + 138 * Number(Form.KZL.value);
+cm = cm + 138 * Number(Form.KZC.value);
+rm = rm + 138 * Number(Form.KZR.value);
+lr = lr + 127 * Number(Form.KXL.value);
+cr = cr + 127 * Number(Form.KXC.value);
+rr = rr + 127 * Number(Form.KXR.value);
+lm = lm + 14 * Number(Form.KHL.value);
+cm = cm + 14 * Number(Form.KHC.value);
+rm = rm + 14 * Number(Form.KHR.value);
+lr = lr + 16 * Number(Form.KOL.value);
+cr = cr + 16 * Number(Form.KOC.value);
+rr = rr + 16 * Number(Form.KOR.value);
+lm = lm + 109 * Number(Form.NAL.value);
+cm = cm + 109 * Number(Form.NAC.value);
+rm = rm + 109 * Number(Form.NAR.value);
+lr = lr + 86 * Number(Form.NBL.value);
+cr = cr + 86 * Number(Form.NBC.value);
+rr = rr + 86 * Number(Form.NBR.value);
+lm = lm + 75 * Number(Form.WHL.value);
+cm = cm + 75 * Number(Form.WHC.value);
+rm = rm + 75 * Number(Form.WHR.value);
+lm = lm + 113 * Number(Form.BRL.value);
+cm = cm + 113 * Number(Form.BRC.value);
+rm = rm + 113 * Number(Form.BRR.value);
+lm = lm + 111 * Number(Form.SWL.value);
+cm = cm + 111 * Number(Form.SWC.value);
+rm = rm + 111 * Number(Form.SWR.value);
+lr = lr + 94 * Number(Form.DBL.value);
+cr = cr + 94 * Number(Form.DBC.value);
+rr = rr + 94 * Number(Form.DBR.value);
+lr = lr + 16 * Number(Form.CAL.value);
+cr = cr + 16 * Number(Form.CAC.value);
+rr = rr + 16 * Number(Form.CAR.value);
+lm = lm + 14 * Number(Form.FBL.value);
+cm = cm + 14 * Number(Form.FBC.value);
+rm = rm + 14 * Number(Form.FBR.value);
+lm = lm + 124 * Number(Form.CWL.value);
+cm = cm + 124 * Number(Form.CWC.value);
+rm = rm + 124 * Number(Form.CWR.value);
+lr = lr + 112 * Number(Form.CBL.value);
+cr = cr + 112 * Number(Form.CBC.value);
+rr = rr + 112 * Number(Form.CBR.value);
+lm = lm + 185 * Number(Form.DZL.value);
+cm = cm + 185 * Number(Form.DZC.value);
+rm = rm + 185 * Number(Form.DZR.value);
+lr = lr + 162 * Number(Form.DXL.value);
+cr = cr + 162 * Number(Form.DXC.value);
+rr = rr + 162 * Number(Form.DXR.value);
+lr = lr + 98 * Number(Form.LBL.value);
+cr = cr + 98 * Number(Form.LBC.value);
+rr = rr + 98 * Number(Form.LBR.value);
+lm = lm + 117 * Number(Form.LWL.value);
+cm = cm + 117 * Number(Form.LWC.value);
+rm = rm + 117 * Number(Form.LWR.value);
+lr = lr + 98 * Number(Form.BBL.value);
+cr = cr + 98 * Number(Form.BBC.value);
+rr = rr + 98 * Number(Form.BBR.value);
+lm = lm + 117 * Number(Form.BWL.value);
+cm = cm + 117 * Number(Form.BWC.value);
+rm = rm + 117 * Number(Form.BWR.value);
+
+if (m0>0) {fm0 = Math.round(lm*100/(100+m0))} else {fm0 = Math.round(lm*(100-m0)/100)}
+if (m1>0) {fm1 = Math.round(cm*100/(100+m1))} else {fm1 = Math.round(cm*(100-m1)/100)}
+if (m2>0) {fm2 = Math.round(rm*100/(100+m2))} else {fm2 = Math.round(rm*(100-m2)/100)}
+if (r0>0) {fr0 = Math.round(lr*100/(100+r0))} else {fr0 = Math.round(lr*(100-r0)/100)} 
+if (r1>0) {fr1 = Math.round(cr*100/(100+r1))} else {fr1 = Math.round(cr*(100-r1)/100)} 
+if (r2>0) {fr2 = Math.round(rr*100/(100+r2))} else {fr2 = Math.round(rr*(100-r2)/100)} 
+
+s = "&nbsp;";
+answer = answer + "melee coefficients: " + m0 + s + m1 + s + m2 + "<BR>";
+answer = answer + "range coefficients: " + r0 + s + r1 + s + r2 + "<BR>";
+answer = answer + "raw melee numbers: " + lm + s + cm + s + rm + "<BR>";
+answer = answer + "raw range numbers: " + lr + s + cr + s + rr + "<BR>";
+
+ta = lm+cm+rm+lr+cr+rr;
+if (ta == 0) { answer = answer + "Some bad information here... you do NOT want to see my solution.<BR>" }
+else {
+answer = answer + "the attack coming is: " + Math.round((lm+lr)/ta*100) + " - " + Math.round((cm+cr)/ta*100) + " - " + Math.round((rm+rr)/ta*100) + "<BR>";
+if (lm+lr == 0) { answer = answer + "and is 0 / 0 on the left<BR>" } else {
+answer = answer + "and is " + Math.round(lm/(lm+lr)*100)+" / "+ Math.round(lr/(lm+lr)*100)+" melee/range on the left<BR>" }
+if (cm+cr == 0) { answer = answer + " and is 0 / 0 in the center<BR>"} else {
+answer = answer + "and is " + Math.round(cm/(cm+cr)*100)+" / "+Math.round(cr/(cm+cr)*100)+" melee/range in the center<BR>" }
+if (rm+rr == 0) { answer = answer + " and is 0 / 0 on the right<BR>"} else {
+answer = answer + "and is " + Math.round(rm/(rm+rr)*100)+" / "+ Math.round(rr/(rm+rr)*100)+" melee/range on the right<BR>" } }
+
+answer = answer + "THE ABOVE IS CORRECT AND USEFUL (as of this posting)<BR><BR>"
+answer = answer + "THE FOLLOWING IS ARGUABLY GOOD ADVICE:<BR>"
+answer = answer + "Final results:<BR>";
+answer = answer + "melee: " + fm0 + s + fm1 + s + fm2 + "<BR>";
+answer = answer + "range: " + fr0 + s + fr1 + s + fr2 + "<BR>";
+
+answer = answer + "Using " + mdefname + " and "+ rdefname + ", you will need:<BR>";
+ffm0 = Math.round(fm0/mdefval); ffm1 = Math.round(fm1/mdefval); ffm2 = Math.round(fm2/mdefval);
+ffr0 = Math.round(fr0/rdefval); ffr1 = Math.round(fr1/rdefval); ffr2 = Math.round(fr2/rdefval);
+answer = answer + ffm0 + s + ffm1 + s + ffm2 + s + mdefname + "<BR>";
+answer = answer + ffr0 + s + ffr1 + s + ffr2 + s + rdefname + "<BR>";
+
+answer = answer + "<BR>Using very primitive (stupid) AI, I think that:<BR>";
+ftot = fm0+fm1+fm2+fr0+fr1+fr2;
+x1 = Math.round(fm0/(fm0+fr0)*100); x2 = Math.round(fm1/(fm1+fr1)*100); x3 = Math.round(fm2/(fm2+fr2)*100);
+y1 = Math.round(fr0/(fm0+fr0)*100); y2 = Math.round(fr1/(fm1+fr1)*100); y3 = Math.round(fr2/(fm2+fr2)*100);
+if (ffm0+ffm1+ffm2+ffr0+ffr1+ffr2 <= troops) {
+   answer = answer + "You can hold all three walls!<BR>";
+   answer = answer + "Set your walls to " + Math.round((fm0+fr0)/ftot*100) +
+   " - " + Math.round((fm1+fr1)/ftot*100) + " - " + Math.round((fm2+fr2)/ftot*100) + "<BR>";
+   answer = answer + "and use M/R of: " + x1 + "/" + y1 + s + x2 + "/" + y2 + s + x3 + "/" + y3 + "<BR>" }
+else if (ffm0+ffr0+ffm1+ffr1 <= troops) {
+   answer = answer + "You can hold the left and center!<BR>";
+   answer = answer + "Set your walls to " + Math.round((fm0+fr0)/(fm0+fr0+fm1+fr1)*100) +
+   " - " + Math.round((fm1+fr1)/(fm0+fr0+fm1+fr1)*100) + " - 0 <BR>";
+   answer = answer + "and use M/R of: " + x1+ "/" + y1 + s + x2 + "/" + y2 + " 50/50<BR>" }
+else if (ffm1+ffr1+ffm2+ffr2 <= troops) {
+   answer = answer + "You can hold the center and right!<BR>";
+   answer = answer + "Set your walls to 0 - " + Math.round((fm1+fr1)/(fm1+fr1+fm2+fr2)*100) + " - " +
+   Math.round((fm2+fr2)/(fm1+fr1+fm2+fr2)*100) + "<BR>";
+   answer = answer + "and use M/R of: 50/50 " + x2 + "/" + y2 + s + x3 + "/" + y3 + "<BR>" }
+else if (ffm0+ffr0+ffm2+ffr2 <= troops) {
+   answer = answer + "You can hold the left and right walls!<BR>";
+   answer = answer + "Set your walls to " + Math.round((fm0+fr0)/(fm0+fr0+fm2+fr2)*100) + " - 0 - " +
+   Math.round((fm2+fr2)/(fm0+fr0+fm2+fr2)*100) + "<BR>";
+   answer = answer + "and use M/R of: " + x1 + "/" + y1 + " 50/50 " + x3 + "/" + y3 + "<BR>" }
+else if (ffm1+ffr1 <= troops) {
+   answer = answer + "Well, you can hold the center, and that is something, right?<BR>";
+   answer = answer + "Set your walls to 0 - 100 - 0 and pray. That's your best bet.<BR>";
+   answer = answer + "and use M/R of: " + x2 + "/" + y2 + "<BR>" }
+else if (ffm0+ffr0 <= troops) {
+   answer = answer + "Well, hang on to the left wall, at least you can do that.<BR>";
+   answer = answer + "Set your walls to 100 - 0 - 0 and pray. That's your best bet.<BR>";
+   answer = answer + "and use M/R of: " + x1 + "/" + y1 + "<BR>" }
+else if (ffm2+ffr2 <= troops) {
+   answer = answer + "Well, hang on to the right wall, at least you can do that.<BR>";
+   answer = answer + "Set your walls to 0 - 0 - 100 and pray. That's your best bet.<BR>";
+   answer = answer + "and use M/R of: " + x3 + "/" + y3 + "<BR>" }
+else {
+   answer = answer + "Consider opening your gates. Seriously. Move everyone out. Now!<BR>";
+   answer = answer + "Your best bet is to place your head between your legs and kiss your ass goodbye.<BR>" }
+
+document.getElementById("answer").innerHTML = answer;
+document.getElementById("answer2").innerHTML = answer;
+}
+
+// -->
+</SCRIPT>
+<FORM>
+   <P><INPUT TYPE=BUTTON OnClick="Combat_calc(this.form);" VALUE="Calculate"></P>
+   <P ID="answer"> </P>   
+
+   <H3>Our Castle:</H3>
+   <P>
+   Wall: <INPUT TYPE="RADIO" NAME="Wall" ID="W1" VALUE="1"> <LABEL FOR="W1"> Wood </LABEL>
+   <INPUT TYPE="RADIO" NAME="Wall" ID="W2" VALUE="2"> <LABEL FOR="W2"> Tudor </LABEL>
+   <INPUT TYPE="RADIO" NAME="Wall" ID="W3" VALUE="3"> <LABEL FOR="W3"> Stone </LABEL>
+   <INPUT TYPE="RADIO" NAME="Wall" ID="W4" VALUE="4"> <LABEL FOR="W4"> Red Top </LABEL>
+   <INPUT TYPE="RADIO" NAME="Wall" ID="W5" VALUE="5"> <LABEL FOR="W5"> White Top </LABEL>
+   </P>
+   <P>
+   Gate Level: <INPUT NAME="Gate" SIZE=4 VALUE=0>
+   </P>
+   <P>
+   Moat: <INPUT TYPE="RADIO" NAME="Moat" ID="M1" VALUE="0"> <LABEL FOR="M1"> None </LABEL>
+   <INPUT TYPE="RADIO" NAME="Moat" ID="M2" VALUE="1"> <LABEL FOR="M2"> Dirt </LABEL>
+   <INPUT TYPE="RADIO" NAME="Moat" ID="M3" VALUE="1"> <LABEL FOR="M3"> Stone </LABEL>
+   </P>
+   <P>
+   Number of Troops on the Walls: <INPUT NAME="Troops" SIZE=4 VALUE=0>
+   </P>
+   <P>
+   Types of Defenders: <INPUT TYPE="RADIO" NAME="TroopType" ID="T1" VALUE="0"> <LABEL FOR="T1"> Regular </LABEL>
+   <INPUT TYPE="RADIO" NAME="TroopType" ID="T2" VALUE="1" CHECKED> <LABEL FOR="T2"> Veteran </LABEL>
+   <INPUT TYPE="RADIO" NAME="TroopType" ID="T3" VALUE="2"> <LABEL FOR="T3"> Kingsguard </LABEL>
+   </P>
+   <H3> Our Castellan: </H3>
+   <P>
+   Wall: <INPUT NAME="CasWall" SIZE=4 VALUE=0>
+   Gate: <INPUT NAME="CasGate" SIZE=4 VALUE=0>
+   Moat: <INPUT NAME="CasMoat" SIZE=4 VALUE=0>
+   Melee: <INPUT NAME="CasMelee" SIZE=4 VALUE=0>
+   Range: <INPUT NAME="CasRange" SIZE=4 VALUE=0>
+   </P>
+   <H3> Their Commander: </H3>
+   <P>
+   Wall: <INPUT NAME="ComWall" SIZE=4 VALUE=0>
+   Gate: <INPUT NAME="ComGate" SIZE=4 VALUE=0>
+   Moat: <INPUT NAME="ComMoat" SIZE=4 VALUE=0>
+   Melee: <INPUT NAME="ComMelee" SIZE=4 VALUE=0>
+   Range: <INPUT NAME="ComRange" SIZE=4 VALUE=0>
+   </P>
+   <H3> Now the tools: </H3>
+   <TABLE BORDER="0">
+   <TR><TD>Ladder</TD><TD><INPUT NAME="LL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="LC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="LR" SIZE=4 VALUE=0></TD><TD>Rocks</TD><TD><INPUT NAME="RL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="RC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="RR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Siege Tower</TD><TD><INPUT NAME="STL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="STC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="STR" SIZE=4 VALUE=0></TD><TD>Tar Kettle</TD><TD><INPUT NAME="TL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="TC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="TR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Belfry</TD><TD><INPUT NAME="EL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="EC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="ER" SIZE=4 VALUE=0></TD><TD>Machicolation</TD><TD><INPUT NAME="FMAL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FMAC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FMAR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Battering Ram</TD><TD></TD><TD><INPUT NAME="FBRC" SIZE=4 VALUE=0></TD><TD></TD><TD>Gate Reinforcement</TD><TD></TD><TD><INPUT NAME="GRC" SIZE=4 VALUE=0></TD><TD></TD></TR>
+   <TR><TD>Iron Ram</TD><TD></TD><TD><INPUT NAME="IRC" SIZE=4 VALUE=0></TD><TD></TD><TD>Insulating Mat</TD><TD></TD><TD><INPUT NAME="IMC" SIZE=4 VALUE=0></TD><TD></TD></TR>
+   <TR><TD>Heavy Ram</TD><TD></TD><TD><INPUT NAME="HRC" SIZE=4 VALUE=0></TD><TD></TD><TD>Portcullis</TD><TD></TD><TD><INPUT NAME="PC" SIZE=4 VALUE=0></TD><TD></TD></TR>
+   <TR><TD>Mantlet</TD><TD><INPUT NAME="NL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="NC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="NR" SIZE=4 VALUE=0></TD><TD>Fire Arrows</TD><TD><INPUT NAME="FAL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FAC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FAR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Iron Mantlet</TD><TD><INPUT NAME="CML" SIZE=4 VALUE=0></TD><TD><INPUT NAME="CMC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="CMR" SIZE=4 VALUE=0></TD><TD>Bulwark</TD><TD><INPUT NAME="WL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="WC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="WR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Shield Wall</TD><TD><INPUT NAME="FSWL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FSWC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FSWR" SIZE=4 VALUE=0></TD><TD>Arrow Slit</TD><TD><INPUT NAME="ASL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="ASC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="ASR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Wood Bundle</TD><TD><INPUT NAME="WBL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="WBC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="WBR" SIZE=4 VALUE=0></TD><TD>Sharp Stake</TD><TD><INPUT NAME="SSL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="SSC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="SSR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Assault Bridge</TD><TD><INPUT NAME="ABL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="ABC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="ABR" SIZE=4 VALUE=0></TD><TD>Gator</TD><TD><INPUT NAME="GSL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="GSC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="GSR" SIZE=4 VALUE=0></TD></TR>
+   <TR><TD>Boulder</TD><TD><INPUT NAME="BLL" SIZE=4 VALUE=0></TD><TD><INPUT NAME="BLC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="BLR" SIZE=4 VALUE=0></TD><TD>Fire Moat</TD><TD><INPUT NAME="FML" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FMC" SIZE=4 VALUE=0></TD><TD><INPUT NAME="FMR" SIZE=4 VALUE=0></TD></TR></TABLE>
+   <H3> And the troops attacking, left, center, and right: </H3>
+   <P> &nbsp; S  <INPUT NAME="SL" SIZE=4 VALUE=0>
+   <INPUT NAME="SC" SIZE=4 VALUE=0> <INPUT NAME="SR" SIZE=4 VALUE=0> Spearman</P>
+   <P> &nbsp; B  <INPUT NAME="BL" SIZE=4 VALUE=0>
+   <INPUT NAME="BC" SIZE=4 VALUE=0> <INPUT NAME="BR" SIZE=4 VALUE=0> Bowman</P>
+   <P> &nbsp; M  <INPUT NAME="ML" SIZE=4 VALUE=0>
+   <INPUT NAME="MC" SIZE=4 VALUE=0> <INPUT NAME="MR" SIZE=4 VALUE=0> Maceman</P>
+   <P> &nbsp; C  <INPUT NAME="CL" SIZE=4 VALUE=0>
+   <INPUT NAME="CC" SIZE=4 VALUE=0> <INPUT NAME="CR" SIZE=4 VALUE=0> Crossbowman</P>
+   <P> &nbsp; G  <INPUT NAME="GL" SIZE=4 VALUE=0>
+   <INPUT NAME="GC" SIZE=4 VALUE=0> <INPUT NAME="GR" SIZE=4 VALUE=0> Swordsman</P>
+   <P> &nbsp; A  <INPUT NAME="AL" SIZE=4 VALUE=0>
+   <INPUT NAME="AC" SIZE=4 VALUE=0> <INPUT NAME="AR" SIZE=4 VALUE=0> Archer</P>
+   <P> &nbsp; H  <INPUT NAME="HL" SIZE=4 VALUE=0>
+   <INPUT NAME="HC" SIZE=4 VALUE=0> <INPUT NAME="HR" SIZE=4 VALUE=0> Halberdier</P>
+   <P> &nbsp; O  <INPUT NAME="OL" SIZE=4 VALUE=0>
+   <INPUT NAME="OC" SIZE=4 VALUE=0> <INPUT NAME="OR" SIZE=4 VALUE=0> Longbowman</P>
+   <P> &nbsp; Z  <INPUT NAME="ZL" SIZE=4 VALUE=0>
+   <INPUT NAME="ZC" SIZE=4 VALUE=0> <INPUT NAME="ZR" SIZE=4 VALUE=0> Twohanded Swordman</P>
+   <P> &nbsp; X  <INPUT NAME="XL" SIZE=4 VALUE=0>
+   <INPUT NAME="XC" SIZE=4 VALUE=0> <INPUT NAME="XR" SIZE=4 VALUE=0> Heavy Crossbowman</P>
+   <P> VS  <INPUT NAME="VSL" SIZE=4 VALUE=0>
+   <INPUT NAME="VSC" SIZE=4 VALUE=0> <INPUT NAME="VSR" SIZE=4 VALUE=0> Veteran Spearman</P>
+   <P> VB  <INPUT NAME="VBL" SIZE=4 VALUE=0>
+   <INPUT NAME="VBC" SIZE=4 VALUE=0> <INPUT NAME="VBR" SIZE=4 VALUE=0> Veteran Bowman</P>
+   <P> VM  <INPUT NAME="VML" SIZE=4 VALUE=0>
+   <INPUT NAME="VMC" SIZE=4 VALUE=0> <INPUT NAME="VMR" SIZE=4 VALUE=0> Veteran Maceman</P>
+   <P> VC  <INPUT NAME="VCL" SIZE=4 VALUE=0>
+   <INPUT NAME="VCC" SIZE=4 VALUE=0> <INPUT NAME="VCR" SIZE=4 VALUE=0> Veteran Crossbowman</P>
+   <P>  VG <INPUT NAME="VGL" SIZE=4 VALUE=0>
+   <INPUT NAME="VGC" SIZE=4 VALUE=0> <INPUT NAME="VGR" SIZE=4 VALUE=0> Veteran Swordman</P>
+   <P>  SM <INPUT NAME="SML" SIZE=4 VALUE=0>
+   <INPUT NAME="SMC" SIZE=4 VALUE=0> <INPUT NAME="SMR" SIZE=4 VALUE=0> Shadow Maceman</P>
+   <P>  SC <INPUT NAME="SCL" SIZE=4 VALUE=0>
+   <INPUT NAME="SCC" SIZE=4 VALUE=0> <INPUT NAME="SCR" SIZE=4 VALUE=0> Shadow Crossbowman</P>
+   <P>  SR <INPUT NAME="SRL" SIZE=4 VALUE=0>
+   <INPUT NAME="SRC" SIZE=4 VALUE=0> <INPUT NAME="SRR" SIZE=4 VALUE=0> Shadow Rogue</P>
+   <P> SF <INPUT NAME="SFL" SIZE=4 VALUE=0>
+   <INPUT NAME="SFC" SIZE=4 VALUE=0> <INPUT NAME="SFR" SIZE=4 VALUE=0>  Shadow Felon</P>
+   <P>  MA <INPUT NAME="MAL" SIZE=4 VALUE=0>
+   <INPUT NAME="MAC" SIZE=4 VALUE=0> <INPUT NAME="MAR" SIZE=4 VALUE=0> Marauder</P>
+   <P>  PY <INPUT NAME="PYL" SIZE=4 VALUE=0>
+   <INPUT NAME="PYC" SIZE=4 VALUE=0> <INPUT NAME="PYR" SIZE=4 VALUE=0> Pyromaniac</P>
+   <P>  TZ <INPUT NAME="TZL" SIZE=4 VALUE=0>
+   <INPUT NAME="TZC" SIZE=4 VALUE=0> <INPUT NAME="TZR" SIZE=4 VALUE=0> Travelling Knight</P>
+   <P>  TX <INPUT NAME="TXL" SIZE=4 VALUE=0>
+   <INPUT NAME="TXC" SIZE=4 VALUE=0> <INPUT NAME="TXR" SIZE=4 VALUE=0> Travelling Crossbowman</P>
+   <P>  KZ <INPUT NAME="KZL" SIZE=4 VALUE=0>
+   <INPUT NAME="KZC" SIZE=4 VALUE=0> <INPUT NAME="KZR" SIZE=4 VALUE=0> Knight of Kingsguard</P>
+   <P>  KX <INPUT NAME="KXL" SIZE=4 VALUE=0>
+   <INPUT NAME="KXC" SIZE=4 VALUE=0> <INPUT NAME="KXR" SIZE=4 VALUE=0> Bowman of Kingsguard</P>
+   <P>  KH <INPUT NAME="KHL" SIZE=4 VALUE=0>
+   <INPUT NAME="KHC" SIZE=4 VALUE=0> <INPUT NAME="KHR" SIZE=4 VALUE=0> Sentinel of Kingsguard</P>
+   <P>  KO <INPUT NAME="KOL" SIZE=4 VALUE=0>
+   <INPUT NAME="KOC" SIZE=4 VALUE=0> <INPUT NAME="KOR" SIZE=4 VALUE=0> Scout of Kingsguard</P>
+   <P>  NA <INPUT NAME="NAL" SIZE=4 VALUE=0>
+   <INPUT NAME="NAC" SIZE=4 VALUE=0> <INPUT NAME="NAR" SIZE=4 VALUE=0> Norseman with ax</P>
+   <P>  NB <INPUT NAME="NBL" SIZE=4 VALUE=0>
+   <INPUT NAME="NBC" SIZE=4 VALUE=0> <INPUT NAME="NBR" SIZE=4 VALUE=0> Norseman with bow</P>
+   <P> WH <INPUT NAME="WHL" SIZE=4 VALUE=0>
+   <INPUT NAME="WHC" SIZE=4 VALUE=0> <INPUT NAME="WHR" SIZE=4 VALUE=0> Wolfhound</P>
+   <P> BR <INPUT NAME="BRL" SIZE=4 VALUE=0>
+   <INPUT NAME="BRC" SIZE=4 VALUE=0> <INPUT NAME="BRR" SIZE=4 VALUE=0> Barbarian</P>
+   <P> SW <INPUT NAME="SWL" SIZE=4 VALUE=0>
+   <INPUT NAME="SWC" SIZE=4 VALUE=0> <INPUT NAME="SWR" SIZE=4 VALUE=0> Saber Warrior</P>
+   <P>  DB <INPUT NAME="DBL" SIZE=4 VALUE=0>
+   <INPUT NAME="DBC" SIZE=4 VALUE=0> <INPUT NAME="DBR" SIZE=4 VALUE=0> Desert Bowman</P>
+   <P> CA <INPUT NAME="CAL" SIZE=4 VALUE=0>
+   <INPUT NAME="CAC" SIZE=4 VALUE=0> <INPUT NAME="CAR" SIZE=4 VALUE=0>  Composite Bowman</P>
+   <P>  FB <INPUT NAME="FBL" SIZE=4 VALUE=0>
+   <INPUT NAME="FBC" SIZE=4 VALUE=0> <INPUT NAME="FBR" SIZE=4 VALUE=0> Flame Bearer</P>
+   <P> CW <INPUT NAME="CWL" SIZE=4 VALUE=0>
+   <INPUT NAME="CWC" SIZE=4 VALUE=0> <INPUT NAME="CWR" SIZE=4 VALUE=0> Cultist Warrior </P>
+   <P>  CB <INPUT NAME="CBL" SIZE=4 VALUE=0>
+   <INPUT NAME="CBC" SIZE=4 VALUE=0> <INPUT NAME="CBR" SIZE=4 VALUE=0> Cultist Bowman</P>
+   <P>  DZ <INPUT NAME="DZL" SIZE=4 VALUE=0>
+   <INPUT NAME="DZC" SIZE=4 VALUE=0> <INPUT NAME="DZR" SIZE=4 VALUE=0> Demon Horror</P>
+   <P> DX <INPUT NAME="DXL" SIZE=4 VALUE=0>
+   <INPUT NAME="DXC" SIZE=4 VALUE=0> <INPUT NAME="DXR" SIZE=4 VALUE=0>  Deathly Horror</P>
+   <P>  LB <INPUT NAME="LBL" SIZE=4 VALUE=0>
+   <INPUT NAME="LBC" SIZE=4 VALUE=0> <INPUT NAME="LBR" SIZE=4 VALUE=0> Lion Bowman</P>
+   <P>  LW <INPUT NAME="LWL" SIZE=4 VALUE=0>
+   <INPUT NAME="LWC" SIZE=4 VALUE=0> <INPUT NAME="LWR" SIZE=4 VALUE=0> Lion Warrior</P>
+   <P>  BB <INPUT NAME="BBL" SIZE=4 VALUE=0>
+   <INPUT NAME="BBC" SIZE=4 VALUE=0> <INPUT NAME="BBR" SIZE=4 VALUE=0> Bear Bowman</P>
+   <P>  BW <INPUT NAME="BWL" SIZE=4 VALUE=0>
+   <INPUT NAME="BWC" SIZE=4 VALUE=0> <INPUT NAME="BWR" SIZE=4 VALUE=0> Bear Warrior</P>
+   <P>
+   <INPUT TYPE=BUTTON OnClick="Combat_calc(this.form);" VALUE="Calculate">
+   </P>
+   <P ID="answer2"> </P>   
+</FORM>
+
+<script type="text/javascript" src="http://ggempire.wdfiles.com/common--javascript/html-block-iframe.js"></script></body></html>
+  <!-- === END ORIGINAL CONTENT === -->
+</body>
+</html>
